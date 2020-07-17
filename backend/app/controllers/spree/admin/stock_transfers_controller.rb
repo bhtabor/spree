@@ -22,6 +22,9 @@ module Spree
         if params[:variant].nil?
           flash[:error] = Spree.t('stock_transfer.errors.must_have_variant')
           render :new
+        elsif any_missing_variants(params[:variant])
+          flash.now[:error] = Spree.t('stock_transfer.errors.variants_unavailable', stock: source_location.name)
+          render :new
         else
           variants = Hash.new(0)
           params[:variant].each_with_index do |variant_id, i|
@@ -50,6 +53,13 @@ module Spree
 
       def destination_location
         @destination_location ||= StockLocation.find(params[:transfer_destination_location_id])
+      end
+
+      def any_missing_variants(variant_ids)
+        variant_ids.map do |variant_id|
+          variant = Spree::Variant.find(variant_id)
+          source_location&.count_on_hand(variant)&.zero?
+        end.any?
       end
     end
   end
