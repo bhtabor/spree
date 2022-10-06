@@ -53,7 +53,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'validates_zipcode'
   s.add_dependency 'mini_magick', '~> 4.9', '>= 4.9.4'
   s.add_dependency 'image_processing', '~> 1.2'
-  s.add_dependency 'active_storage_validations', '~> 0.9'
+  s.add_dependency 'active_storage_validations', '>= 0.9', '< 2.0'
 
   s.add_development_dependency 'email_spec', '~> 2.2'
 end
